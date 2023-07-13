@@ -1,31 +1,35 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 // import Router from "next/router";
 import { useRouter } from "next/navigation";
+import { AuthContext } from "@/context/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { user, loading, error, dispatch } = useContext(AuthContext);
 
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    dispatch({ type: "LOGIN_START" });
     try {
       const res = await axios.post("/api/auth/login", { email, password });
       // if (!res.ok) {
       //   throw new Error("Unable to connect");
       // }
       // no need to send to local storage
-      localStorage.setItem("currentuser", JSON.stringify(res.data.data));
+      dispatch({ type: "LOGIN_SUCCESS", payload: res.data.data });
+      // localStorage.setItem("currentuser", JSON.stringify(res.data.data));
       router.push("/");
     } catch (error) {
       console.log(error);
     }
   };
-
+  console.log("from Login with Dispatch", user);
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -89,6 +93,7 @@ export default function Login() {
               >
                 Sign in
               </button>
+              {error && <span>{error.message}</span>}
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Dont have an account yet?{" "}
                 <Link

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryProvider } from "./Provider/QueryClientProvider";
 import Navbar from "./components/navbar";
+import { AuthContextProvider } from "@/context/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,8 +18,10 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <body className="max-w-full bg-gray-800">
           <div className="mx-auto max-w-6xl flex flex-col h-full">
-            <Navbar />
-            {children}
+            <AuthContextProvider>
+              <Navbar />
+              {children}
+            </AuthContextProvider>
           </div>
         </body>
       </html>

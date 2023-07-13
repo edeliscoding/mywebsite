@@ -43,15 +43,9 @@ export default function EditProfile() {
     e.target[0].value = "";
   };
 
-  // const handleSeller = (e) => {
-  //   setUser((prev) => {
-  //     return { ...prev, isSeller: e.target.checked };
-  //   });
-  // };
   const handleEmail = (e) => {
     dispatch({
       type: "TOGGLE_EMAIL",
-      // payload: { name: e.target.name, value: e.target.value },
     });
   };
   const handleEmailInput = (e) => {};
