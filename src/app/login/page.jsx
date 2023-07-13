@@ -20,7 +20,7 @@ export default function Login() {
       // }
       // no need to send to local storage
       localStorage.setItem("currentuser", JSON.stringify(res.data.data));
-      router.push("/addprofile");
+      router.push("/");
     } catch (error) {
       console.log(error);
     }
