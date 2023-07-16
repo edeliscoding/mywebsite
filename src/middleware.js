@@ -6,9 +6,9 @@ export function middleware(request) {
   try {
     const token = request.cookies.get("accessToken")?.value || "";
 
-    if (isPublicPath && token) {
-      return NextResponse.redirect(new URL("/", request.nextUrl));
-    }
+    // if (isPublicPath && token) {
+    //   return NextResponse.redirect(new URL("/", request.nextUrl));
+    // }
 
     if (!isPublicPath && !token) {
       return NextResponse.redirect(new URL("/login", request.nextUrl));

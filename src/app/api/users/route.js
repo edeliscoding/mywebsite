@@ -9,6 +9,7 @@ export async function GET(request) {
   try {
     const userId = await getDataFromToken(request);
     const profiles = await Profile.find({ userId: userId });
+    console.log(profiles);
     // console.log("from Users Route", userId);
     return NextResponse.json({
       message: "user found",

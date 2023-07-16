@@ -50,6 +50,16 @@ export const profileReducer = (state, action) => {
           [action.payload.name]: action.payload.value,
         },
       };
+    case "GET_PROFILE":
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case "ADD_PROFILE":
+      return {
+        ...state,
+        ...action.payload,
+      };
     case "TOGGLE_EMAIL":
       return {
         ...state,

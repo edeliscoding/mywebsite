@@ -23,7 +23,7 @@ export default function Login() {
       // }
       // no need to send to local storage
       dispatch({ type: "LOGIN_SUCCESS", payload: res.data.data });
-      // localStorage.setItem("currentuser", JSON.stringify(res.data.data));
+      localStorage.setItem("currentuser", JSON.stringify(res.data.data));
       router.push("/");
     } catch (error) {
       console.log(error);
