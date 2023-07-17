@@ -44,7 +44,8 @@ export async function POST(request) {
       httpOnly: true,
       sameSite: "none",
       secure: true,
-      maxAge: 1 * 24 * 60 * 60 * 1000,
+      // maxAge: 1 * 24 * 60 * 60 * 1000,
+      maxAge: 86400,
     });
 
     return response;

@@ -15,16 +15,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ReactQueryProvider>
-      <html lang="en">
-        <body className="max-w-full bg-gray-800">
-          <div className="mx-auto max-w-6xl flex flex-col h-full">
-            <AuthContextProvider>
+      <AuthContextProvider>
+        <html lang="en">
+          <body className="max-w-full bg-gray-800">
+            <div className="mx-auto max-w-6xl flex flex-col h-full">
               <Navbar />
               {children}
-            </AuthContextProvider>
-          </div>
-        </body>
-      </html>
+            </div>
+          </body>
+        </html>
+      </AuthContextProvider>
     </ReactQueryProvider>
   );
 }

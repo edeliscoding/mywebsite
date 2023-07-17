@@ -1,7 +1,7 @@
 "use client";
 
 // if (typeof window !== "undefined") {
-//   const localStor = localStorage.getItem("currentUser")._id;
+//   const localStore = localStorage.getItem("currentUser")._id || null,
 // }
 
 export const INITIAL_STATE = {
