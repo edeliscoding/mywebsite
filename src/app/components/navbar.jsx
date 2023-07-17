@@ -244,12 +244,41 @@ export default function Navbar() {
             <Link href="/dashboard">Dashboard</Link>
           </button>
           {user ? (
-            <button
-              className="text-left mb-2 hover:bg-blue-500"
-              onClick={handleLogout}
+            // <button
+            //   className="text-left mb-2 hover:bg-blue-500"
+            //   onClick={handleLogout}
+            // >
+            //   Logout
+            // </button>
+            <div
+              className="flex gap-2 items-center relative"
+              onClick={handleOpen}
             >
-              Logout
-            </button>
+              <img
+                className="h-8 w-8 rounded-full bg-slate-800 ring-2"
+                src="/blankprofile.png"
+              />
+              <span>{user.username}</span>
+              {open && (
+                <div
+                  className="w-[130px] absolute p-3  top-10 border-2 border-sky-500 text-white text-6lg bg-gray-500  flex flex-col"
+                  ref={ref}
+                >
+                  <button
+                    className="text-left mb-2 hover:bg-blue-500"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                  {/* <Link
+                    className="text-left mb-2 hover:bg-blue-500"
+                    href={`/editdashboard/${state._id}`}
+                  >
+                    Edit Profile
+                  </Link> */}
+                </div>
+              )}
+            </div>
           ) : (
             <button
               className="p-2 text-orange border border-slate-300"
