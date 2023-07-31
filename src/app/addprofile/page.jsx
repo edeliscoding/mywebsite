@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useReducer, useState } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { INITIAL_STATE, profileReducer } from "@/reducers/profileReducer";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -8,9 +8,19 @@ import { useDispatch } from "react-redux";
 import upload from "../helpers/upload";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
+import { AuthContext } from "@/context/AuthContext";
+// import { useSession } from "next-auth/react";
 
 export default function EditProfile() {
   const [state, dispatch] = useReducer(profileReducer, INITIAL_STATE);
+  // const { data } = useSession({
+  //   required: true,
+  //   onUnauthenticated() {
+  //     redirect("/api/auth/login?callbackUrl=/addprofile");
+  //   },
+  // });
+  const { user, loading, error } = useContext(AuthContext);
 
   const [singleFile, setSingleFile] = useState(undefined);
   const [files, setFiles] = useState([]);
@@ -113,6 +123,9 @@ export default function EditProfile() {
       // queryClient.invalidateQueries(["myGigs"]);
     },
   });
+  useEffect(() => {
+    user === null ? router.push("/login") : router.push("/addprofile");
+  }, [user]);
 
   return (
     <div className="bg-gray-800">

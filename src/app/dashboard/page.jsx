@@ -3,11 +3,16 @@ import { INITIAL_STATE, profileReducer } from "@/reducers/profileReducer";
 import axios from "axios";
 import moment from "moment";
 import Link from "next/link";
-import { useEffect, useState, useReducer } from "react";
+import { useEffect, useState, useReducer, useContext } from "react";
+import { AuthContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
   // const [data, setData] = useState([]);
   const [state, dispatch] = useReducer(profileReducer, INITIAL_STATE);
+  const { user, loading, error } = useContext(AuthContext);
+
+  const router = useRouter();
 
   useEffect(() => {
     const getData = async () => {
@@ -18,6 +23,11 @@ export default function Dashboard() {
     };
     getData();
   }, []);
+
+  useEffect(() => {
+    user === null ? router.push("/login") : router.push("/dashboard");
+  }, [user]);
+
   // console.log("from useEffect", res.data);
   // const content = JSON.stringify(data);
   // const { title, avatar, aboutMe } = data;

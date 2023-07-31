@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { INITIAL_STATE, profileReducer } from "@/reducers/profileReducer";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -8,10 +8,13 @@ import { useDispatch } from "react-redux";
 import upload from "../helpers/upload";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { AuthContext } from "@/context/AuthContext";
 
 export default function Edit() {
   const [state, dispatch] = useReducer(profileReducer, INITIAL_STATE);
+  const { user, loading, error } = useContext(AuthContext);
   // const [data, setData] = useState([]);
+
   const id = state._id;
   const [singleFile, setSingleFile] = useState(undefined);
   const [files, setFiles] = useState([]);
@@ -155,6 +158,10 @@ export default function Edit() {
     };
     getData();
   }, []);
+
+  useEffect(() => {
+    user === null ? router.push("/login") : router.push("/editdashboard");
+  }, [user]);
 
   // console.log("from editdashboard", data);
   return (
