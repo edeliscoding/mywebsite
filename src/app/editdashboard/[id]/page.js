@@ -8,6 +8,9 @@ import { useDispatch } from "react-redux";
 import upload from "../../helpers/upload";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+// import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 export default function Edit({ params }) {
   const [state, dispatch] = useReducer(profileReducer, INITIAL_STATE);
@@ -20,6 +23,7 @@ export default function Edit({ params }) {
 
   const router = useRouter();
   // const dispatch = useDispatch();
+  // const navigate = useNavigate();
 
   const handleChange = (e) => {
     dispatch({
@@ -99,7 +103,7 @@ export default function Edit({ params }) {
     e.preventDefault();
     console.log("From Handle Submit", state);
     mutation.mutate(state);
-
+    // navigate("/dashboard");
     router.push("/dashboard");
     // router.push("/");
   };
@@ -127,11 +131,11 @@ export default function Edit({ params }) {
   const mutation = useMutation({
     mutationFn: (profile) => {
       const editedProfile = axios.put(`/api/profile/${id}`, profile);
-      dispatch({ type: "ADD_PROFILE", payload: editedProfile });
+      // dispatch({ type: "ADD_PROFILE", payload: editedProfile });
       return editedProfile;
     },
     onSuccess: () => {
-      router.refresh();
+      queryClient.invalidateQueries(["dashboard"]);
     },
   });
 
@@ -147,15 +151,41 @@ export default function Edit({ params }) {
   //   getProfile();
   // }, []);
 
-  useEffect(() => {
-    const getData = async () => {
-      const res = await axios.get("/api/users");
-      console.log(res.data);
-      // setData(res.data.data);
-      dispatch({ type: "GET_PROFILE", payload: res.data.data[0] });
-    };
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const res = await axios.get("/api/users");
+  //     console.log(res.data);
+  //     // setData(res.data.data);
+  //     dispatch({ type: "GET_PROFILE", payload: res.data.data[0] });
+  //   };
+  //   getData();
+  //   console.log("data", state);
+  // }, []);
+
+  const { data, isLoading } = useQuery(["editdashboard"], async () => {
+    const response = await fetch("/api/users");
+    const userData = await response.json();
+    const user = userData.data[0];
+    console.log("user data", data);
+    // Dispatch the action with the user data
+    dispatch({ type: "GET_PROFILE", payload: user });
+
+    return user;
+  });
+
+  const dateConverted = (dateHere) => {
+    return moment(dateHere).utc().format("MM/DD/YYYY");
+  };
+
+  function formatDateString(originalDateString) {
+    const originalDate = new Date(originalDateString);
+
+    const year = originalDate.getFullYear();
+    const month = (originalDate.getMonth() + 1).toString().padStart(2, "0");
+    const day = originalDate.getDate().toString().padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
 
   // console.log("from editdashboard", data);
   return (
@@ -180,7 +210,7 @@ export default function Edit({ params }) {
             <select
               name="category"
               id="cat"
-              selected={state?.category}
+              selected={state.category}
               onChange={handleChange}
               className="p-2 text-gray-900 rounded-md"
             >
@@ -216,7 +246,7 @@ export default function Edit({ params }) {
               Tell Us About Yourself
             </label>
             <textarea
-              value={state?.aboutMe}
+              value={state.aboutMe}
               name="aboutMe"
               className="p-2 text-gray-900 rounded-md mb-3"
               id=""
@@ -239,7 +269,7 @@ export default function Edit({ params }) {
               </button>
             </form>
             <div className="addedFeatures">
-              {state?.skills?.map((f) => (
+              {state.skills?.map((f) => (
                 <div className="item bg-gray-500 mt-2 rounded-md" key={f}>
                   <button
                     className="flex items-center pl-2"
@@ -280,7 +310,7 @@ export default function Edit({ params }) {
           <div className="details w-1/2 flex flex-col rounded-md">
             <label htmlFor="">Your Website</label>
             <input
-              value={state?.website}
+              value={state.website}
               type="text"
               className="p-2 text-gray-900 rounded-md mb-3"
               name="website"
@@ -300,7 +330,7 @@ export default function Edit({ params }) {
                   Add Another
                 </button>
               </form> */}
-              {state?.workHistory?.map((work, index) => (
+              {state.workHistory?.map((work, index) => (
                 <div key={index}>
                   <form action="" className="add flex flex-col gap-3">
                     <input
@@ -328,7 +358,8 @@ export default function Edit({ params }) {
                         type="date"
                         placeholder=""
                         name="startDate"
-                        value={work.startDate}
+                        // value={work.startDate}
+                        value={formatDateString(work.startDate)}
                         onChange={(e) => handleWorkChange(e, index)}
                       />
                       <span>End Date</span>
@@ -337,7 +368,8 @@ export default function Edit({ params }) {
                         type="date"
                         placeholder=""
                         name="endDate"
-                        value={work.endDate}
+                        // value={dateConverted(work.endDate)}
+                        value={formatDateString(work.endDate)}
                         onChange={(e) => handleWorkChange(e, index)}
                       />
                     </div>

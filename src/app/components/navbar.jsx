@@ -237,9 +237,9 @@ export default function Navbar() {
           <button className="p-2 text-orange border border-slate-300">
             <Link href="/">Home</Link>
           </button>
-          <button className="p-2 text-orange border border-slate-300">
+          {/* <button className="p-2 text-orange border border-slate-300">
             <Link href="/addprofile">Add Profile</Link>
-          </button>
+          </button> */}
           <button className="p-2 text-orange border border-slate-300">
             <Link href="/dashboard">Dashboard</Link>
           </button>
